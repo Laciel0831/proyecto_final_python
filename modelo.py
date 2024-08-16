@@ -4,37 +4,38 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox , Image
 
+class conexion:
+    
+    def crearConexion():
+        connection = mysql.connector.connect(
+            host = 'localhost',
+            database = 'catalogo',
+            user = 'root',
+            password = ''
+        )
+        return connection
 
-def crearConexion():
-    connection = mysql.connector.connect(
-        host = 'localhost',
-        database = 'catalogo',
-        user = 'root',
-        password = ''
-    )
-    return connection
 
 
-
-def verificacion_conexion(datoConexion):
-    if datoConexion.is_connected():
-        print("conexion exitosa a la base de datos")
-        cursor = datoConexion.cursor()
-        cursor.execute("SELECT * FROM productos")
-        resultados = cursor.fetchall()
-        print(resultados) 
+    def verificacion_conexion(datoConexion):
+        if datoConexion.is_connected():
+            print("conexion exitosa a la base de datos")
+            cursor = datoConexion.cursor()
+            cursor.execute("SELECT * FROM productos")
+            resultados = cursor.fetchall()
+            print(resultados) 
+            
+            
+    def registrar(datoconexion):
+        cursor = datoconexion.cursor()
+        codigo = input("digite es")
+        nombres = input("nombre")
+        cursor.execute("INSERT INTO alumnos(idAlumnos,nombreAlumno) VALUES (%s, %s)", (codigo, nombres))
+        print("registro insertado")
+        datoconexion.commit()
         
-        
-def registrar(datoconexion):
-    cursor = datoconexion.cursor()
-    codigo = input("digite es")
-    nombres = input("nombre")
-    cursor.execute("INSERT INTO alumnos(idAlumnos,nombreAlumno) VALUES (%s, %s)", (codigo, nombres))
-    print("registro insertado")
-    datoconexion.commit()
-        
-aux = crearConexion()
-aux2 = verificacion_conexion(aux)
+aux = conexion.crearConexion()
+aux2 = conexion.verificacion_conexion(aux)
 
 
 
@@ -81,6 +82,7 @@ class Login:
         
     def Validar_formulario_completo(self):
         if len(self.usuario_login.get()) !=0 and len(self.password_login.get()) !=0:
+            print("validado")
             return True
         else:
              messagebox.showerror("ERROR DE INGRESO", "Ingrese su usuario y contraseña!!!")
@@ -91,20 +93,24 @@ class Login:
             self.password_login.delete(0, END)
 
     def Login(self):
-        try:
+        
             if(self.Validar_formulario_completo()):
                 usuario= self.usuario_login.get()
                 password= self.password_login.get()
-                dato = self.Validar_login(usuario, password)
-                if (dato != []):
+                conexion1 = conexion.crearConexion()
+                cursor = conexion1.cursor()
+                cursor.execute("SELECT * FROM usuarios" )
+                consulta = cursor.fetchall()
+                print(consulta)
+                                          #SELECT usuario, contrasena FROM usuarios WHERE usuario == %s AND contrasena == %s", (usuario, password))
+                
+                if (consulta == TRUE):
                     messagebox.showinfo("BIENVENIDO", "Datos ingresados correctamente")
                     self.__init__(self,ventana_producto=ventana_login)
                 else:
                     messagebox.showerror("ERROR DE INGRESO", "usuario o contraseña incorrecto") 
                 self.Limpiar_login()
-        except:
-            messagebox.showerror("ERROR", "Ha ocurrido un error, reinicie el programa")
-            self.Limpiar_login()
+        
    
 
 
