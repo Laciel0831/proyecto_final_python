@@ -102,11 +102,17 @@ class Login:
                 cursor.execute("SELECT * FROM usuarios" )
                 consulta = cursor.fetchall()
                 print(consulta)
+                print(usuario)
+                cursor2 = conexion1.cursor()
+                sql = "SELECT * FROM usuarios WHERE usuario = %s", (usuario)
+                cursor2.execute(sql)
+                consulta2 = cursor2.fetchall()
+                print(consulta2)
                                           #SELECT usuario, contrasena FROM usuarios WHERE usuario == %s AND contrasena == %s", (usuario, password))
                 
-                if (consulta == TRUE):
+                if ():
                     messagebox.showinfo("BIENVENIDO", "Datos ingresados correctamente")
-                    self.__init__(self,ventana_producto=ventana_login)
+                    
                 else:
                     messagebox.showerror("ERROR DE INGRESO", "usuario o contraseña incorrecto") 
                 self.Limpiar_login()
