@@ -20,19 +20,8 @@ class conexion:
     def verificacion_conexion(datoConexion):
         if datoConexion.is_connected():
             print("conexion exitosa a la base de datos")
-            cursor = datoConexion.cursor()
-            cursor.execute("SELECT * FROM productos")
-            resultados = cursor.fetchall()
-            print(resultados) 
             
             
-    def registrar(datoconexion):
-        cursor = datoconexion.cursor()
-        codigo = input("digite es")
-        nombres = input("nombre")
-        cursor.execute("INSERT INTO alumnos(idAlumnos,nombreAlumno) VALUES (%s, %s)", (codigo, nombres))
-        print("registro insertado")
-        datoconexion.commit()
         
 aux = conexion.crearConexion()
 aux2 = conexion.verificacion_conexion(aux)
@@ -99,18 +88,14 @@ class Login:
                 password= self.password_login.get()
                 conexion1 = conexion.crearConexion()
                 cursor = conexion1.cursor()
-                cursor.execute("SELECT * FROM usuarios" )
+                cursor.execute(f"SELECT * FROM usuarios WHERE usuario = '{usuario}' AND contrasena = '{password}'")
+                print(usuario)
                 consulta = cursor.fetchall()
                 print(consulta)
-                print(usuario)
-                cursor2 = conexion1.cursor()
-                sql = "SELECT * FROM usuarios WHERE usuario = %s", (usuario)
-                cursor2.execute(sql)
-                consulta2 = cursor2.fetchall()
-                print(consulta2)
+                
                                           #SELECT usuario, contrasena FROM usuarios WHERE usuario == %s AND contrasena == %s", (usuario, password))
                 
-                if ():
+                if (consulta != []):
                     messagebox.showinfo("BIENVENIDO", "Datos ingresados correctamente")
                     
                 else:
