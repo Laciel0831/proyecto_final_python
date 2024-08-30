@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 22-08-2024 a las 02:38:43
+-- Tiempo de generación: 30-08-2024 a las 13:27:46
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -64,6 +64,18 @@ INSERT INTO `usuarios` (`id`, `usuario`, `contrasena`, `nombre`) VALUES
 (1, 'bryan', '1234', 'bryan'),
 (2, 'jose', '1234', 'jose');
 
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `ventas`
+--
+
+CREATE TABLE `ventas` (
+  `codigo` int(10) NOT NULL,
+  `cantidad` int(10) NOT NULL,
+  `fecha` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 --
 -- Índices para tablas volcadas
 --
@@ -79,6 +91,12 @@ ALTER TABLE `productos`
 --
 ALTER TABLE `usuarios`
   ADD PRIMARY KEY (`usuario`);
+
+--
+-- Indices de la tabla `ventas`
+--
+ALTER TABLE `ventas`
+  ADD PRIMARY KEY (`codigo`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
