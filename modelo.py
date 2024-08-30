@@ -1,8 +1,11 @@
 import mysql.connector
+import json
+from datetime import datetime, date, time
 from mysql.connector import Error
 from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox , Image
+now = datetime.now()
 
 class conexion:
     
@@ -20,19 +23,8 @@ class conexion:
     def verificacion_conexion(datoConexion):
         if datoConexion.is_connected():
             print("conexion exitosa a la base de datos")
-            cursor = datoConexion.cursor()
-            cursor.execute("SELECT * FROM productos")
-            resultados = cursor.fetchall()
-            print(resultados) 
             
             
-    def registrar(datoconexion):
-        cursor = datoconexion.cursor()
-        codigo = input("digite es")
-        nombres = input("nombre")
-        cursor.execute("INSERT INTO alumnos(idAlumnos,nombreAlumno) VALUES (%s, %s)", (codigo, nombres))
-        print("registro insertado")
-        datoconexion.commit()
         
 aux = conexion.crearConexion()
 aux2 = conexion.verificacion_conexion(aux)
@@ -99,30 +91,153 @@ class Login:
                 password= self.password_login.get()
                 conexion1 = conexion.crearConexion()
                 cursor = conexion1.cursor()
-                cursor.execute("SELECT * FROM usuarios" )
+                cursor.execute(f"SELECT * FROM usuarios WHERE usuario = '{usuario}' AND contrasena = '{password}'")
+                print(usuario)
                 consulta = cursor.fetchall()
                 print(consulta)
-                print(usuario)
-                cursor2 = conexion1.cursor()
-                sql = "SELECT * FROM usuarios WHERE usuario = %s", (usuario)
-                cursor2.execute(sql)
-                consulta2 = cursor2.fetchall()
-                print(consulta2)
+                
                                           #SELECT usuario, contrasena FROM usuarios WHERE usuario == %s AND contrasena == %s", (usuario, password))
                 
-                if ():
+                if (consulta != []):
                     messagebox.showinfo("BIENVENIDO", "Datos ingresados correctamente")
                     
                 else:
                     messagebox.showerror("ERROR DE INGRESO", "usuario o contraseña incorrecto") 
                 self.Limpiar_login()
         
-   
+ 
+class modelo:
+    def __init__(self) -> None:
+         self._nombre = None
+         self._descripcion = None
+         self._categoria = None
+         self._precio = None
+         self._vendido = None
+         self._dia = None
+         self._hora = None
+         self._base = []
+         
+    @property
+    def nombre(self):
+        return self._nombre
+    @property
+    def descripcion(self):
+        return self._descripcion
+    @property
+    def categoria(self):
+        return self._categoria
+    @property
+    def precio(self):
+        return self._precio
+    @property
+    def vendido(self):
+        return self._vendido
+    @property
+    def dia(self):
+        return self._dia
+    @property
+    def hora(self):
+        return self._hora
+    @property
+    def base(self):
+        return self._base
+    
+    @nombre.setter
+    def nombre(self, nombre):
+        self._nombre = nombre
+    @descripcion.setter
+    def descripcion(self, descripcion):
+        self._descripcion = descripcion
+    @categoria.setter
+    def categoria(self, categoria):
+        self._categoria = categoria
+    @precio.setter
+    def precio(self, precio):
+        self._precio = precio
+    @vendido.setter
+    def vendido(self, vendido):
+        self._vendido = vendido
+    @dia.setter
+    def dia(self, dia):
+        self._dia = dia
+    @hora.setter
+    def hora(self, hora):
+        self._hora = hora
+    @categoria.setter
+    def base(self, base):
+        self._base = base
+    
+         
+    def registrarProducto(nombre, descripcion, categoria, precio, vendido, dia, hora):
 
-
-
+            conexion1 = conexion.crearConexion()
+            cursor = conexion1.cursor()
+            cursor.execute(f"INSERT INTO productos (`nombre`, `descripcion`, `categoria`, `precio`, `vendido`, `dia`, `hora`) VALUES ('{nombre}','{descripcion}','{categoria}','{precio}','{vendido}','{dia}','{hora}')")
+            conexion1.commit()
+            print("Datos guardados")
+            
+    def consultarDatos():
+        conexion1 = conexion.crearConexion()
+        cursor = conexion1.cursor()
+        cursor.execute(f"SELECT * FROM productos")
+        consulta = cursor.fetchall()
+        return consulta
+    
+    def consultarCategoria(categoria):
+        conexion1 = conexion.crearConexion()
+        cursor = conexion1.cursor()
+        cursor.execute(f"SELECT * FROM productos WHERE categoria = '{categoria}'")
+        consulta = cursor.fetchall()
+        return consulta
+        
+        
+    #def generar_archivo():
+     #   datos2 = modelo.consultarDatos()
+      #  json_dato=json.dumps(datos2)
+       # print(json_dato)
+        #serializar a no json
+       # sin_jason = json.loads(json_dato)
+       # print(sin_jason)
+        
+        #serializar y escribir en un archivo
+        
+            
+    
+            
+    def generarInforme(dia):
+            with open(f'{dia}', 'w', encoding='utf8') as archivo:
+                
+                json.dumps(modelo._base, archivo)
+            print("informe generado")
+                
+    
 #verificar si el modulo ha sido ejecutado correctamente  
-if __name__ == '__main__':
-    ventana_login=Tk()
-    application=Login(ventana_login)
-    ventana_login.mainloop()
+#if __name__ == '__main__':
+#    ventana_login=Tk()
+#    application=Login(ventana_login)
+#    ventana_login.mainloop()
+#    fecha = now.date()
+#    print(fecha)
+dia1 = now.date()
+hora1 = now.time()
+modelo._base = modelo.consultarDatos()
+print(modelo._base)
+resultado = modelo.consultarCategoria('limpieza')
+print(resultado)
+#modelo.generarInforme(dia1)
+nombre1 = input("nombre")
+descripcion1 = input("descrip")
+categoria1 = input("categoria")
+precio1 = float(input("precio"))
+vendido1 = int(input("vendido"))
+
+
+modelo.nombre = nombre1
+modelo.descripcion = descripcion1
+modelo.categoria = categoria1
+modelo.precio = precio1
+modelo.vendido = vendido1
+modelo.dia = dia1
+modelo.hora = hora1
+
+modelo.registrarProducto(modelo.nombre, modelo.descripcion, modelo.categoria, modelo.precio, modelo.vendido, modelo.dia, modelo.hora)
