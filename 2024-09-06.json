@@ -1,0 +1,37 @@
+{
+    "productos": [
+        [
+            1,
+            "mortal kombat",
+            "juego de accion",
+            "accion",
+            30000.0,
+            2
+        ],
+        [
+            2,
+            "halo",
+            "vvfff",
+            "juegos",
+            50000.0,
+            7
+        ],
+        [
+            3,
+            "gears of wars",
+            "etjtrhlkrthrtlj",
+            "accion",
+            60000.0,
+            4
+        ],
+        [
+            4,
+            "diablo",
+            "uilliukyjtj",
+            "rol",
+            80000.0,
+            8
+        ]
+    ],
+    "informe_realizado_a": "08:50:50.991528"
+}
