@@ -1,12 +1,10 @@
 import tkinter as tk
 from tkinter import ttk
-from tkinter import messagebox
 
 class ReportView(tk.Frame):
-    def __init__(self, master,controlador):
+    def __init__(self, master=None):
         super().__init__(master)
         self.master = master
-        self.controlador=controlador
         self.create_widgets()
 
     def create_widgets(self):
@@ -42,7 +40,7 @@ class ReportView(tk.Frame):
         category_frame = tk.Frame(self.master)
         category_frame.pack(side="top", fill="x")
 
-        categories = ["Categoría 1", "Categoría 2", "Categoría 3", "Categoría 4", "Categoría 5"]
+        categories = ["Aseo", "Comida", "juegos", "Ferreteria", "Ropa"]
         for category in categories:
             category_button = tk.Button(category_frame, text=category)
             category_button.pack(side="left", padx=5, pady=5)
@@ -83,7 +81,7 @@ class ReportView(tk.Frame):
         self.unsold_table.pack()
 
         # Botón para generar informe
-        generate_report_button = tk.Button(content_frame, text="Generar Informe",command=self.informe)
+        generate_report_button = tk.Button(content_frame, text="Generar Informe")
         generate_report_button.pack(pady=10)
 
         # Frame inferior de navegación
@@ -104,15 +102,3 @@ class ReportView(tk.Frame):
 
         books_nav_button = tk.Button(bottom_nav_frame, text="Books")
         books_nav_button.pack(side="left", padx=5)
-
-    def informe(self):
-        self.controlador.generarInforme()
-        messagebox.showinfo("Solicitud Realizada","Informe Generado Exitosamente")
-
-
-
-
-
-
-
-

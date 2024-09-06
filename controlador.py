@@ -1,38 +1,86 @@
 import tkinter as tk
+import json
 from vista_catalogo import vista_catalogo
 from vista_reporte import ReportView
-from vista_login import Login  # Asegúrate de importar la vista de login
+from vista_login import Login
+from vista_registro_producto import VistaRegistroProducto  # Asegúrate de que el nombre del archivo sea correcto
+from modelo import modelo
+from datetime import datetime
 
-class Controller:
-    def __init__(self, root):
-        self.root = root
-        self.show_login_view()
+ahora = datetime.now()
 
-    def show_login_view(self):
-        # Mostrar la vista de login
-        self.current_view = Login(master=self.root, controller=self)
-        self.current_view.pack(fill="both", expand=True)
+class Controlador:
+    def __init__(self, ventana):
+        self.ventana = ventana
+        self.modelo = modelo()
+        self.inicioSesion()
+    
+    def inicioSesion(self):
+        self.vista = Login(self.ventana, self)
 
-    def mostar_vista_catalogo(self):
-        # Eliminar la vista de login y mostrar el catálogo
-        self.current_view.pack_forget()
-        self.current_view = vista_catalogo(master=self.root, controller=self)
-        self.current_view.pack(fill="both", expand=True)
+    def Validar_formulario(self, usuario, contraseña):
+        if len(usuario) != 0 and len(contraseña) != 0:
+            if self.modelo.validarUsuario(usuario, contraseña):
+                texto = "Bienvenido Usuario"
+                self.vista.Validar_formulario_completo(texto)
+                self.vista.ocultarWidgets()
+                self.vistaCatalogo()
+            else:
+                texto = "Usuario o contraseña incorrectos"
+                self.vista.Limpiar_login(texto)
+                return True
+        else:
+            texto = "Ingrese su usuario y contraseña!!!"
+            self.vista.Limpiar_login(texto)
+            return False
 
-    def show_report_view(self):
-        report_window = tk.Toplevel(self.root)  # Crear una nueva ventana para el reporte
-        report_window.geometry("800x600")  # Tamaño de la ventana para la vista de reportes
-        self.current_view = ReportView(master=report_window)
-        self.current_view.pack(fill="both", expand=True)
+    def vistaCatalogo(self):
+        self.vista = vista_catalogo(self.ventana, self)
+        self.vista.pack(fill="both", expand=True)
 
-    def login_successful(self):
-        # Llamado después de un login exitoso para mostrar el catálogo
-        self.mostar_vista_catalogo()
+    def vistaReporte(self):
+        self.vistaInforme = tk.Toplevel(self.ventana)
+        self.vistaInforme.geometry("1000x600")
+        self.vista = ReportView(self.vistaInforme, self)
+        self.vista.pack(fill="both", expand=True)
+
+    def vistaRegistroProducto(self):
+        self.vistaRegistro = VistaRegistroProducto(self)
+        self.vistaRegistro.grab_set()  # Esto hace que la ventana de registro sea modal
+
+    def generarInforme(self):
+        dia = ahora.date()
+        hora = ahora.time()
+        datos = self.modelo.consultarDatos()
+        with open(f'{dia}.json', 'w', encoding='utf8') as archivo:
+            productos = {"productos": datos, "informe_realizado_a": str(hora)}
+            json.dump(productos, archivo, indent=4)  # Guarda los datos en formato JSON
+
+    def get_all_categories(self):
+        """Devuelve una lista de todas las categorías."""
+        return [cat[0] for cat in self.modelo.consultarCategoria()]  # Asume que el resultado es una lista de tuplas
+
+    def get_products_by_category(self, category):
+        """Devuelve los productos de una categoría específica."""
+        return self.modelo.consultarCategoria(category)
+
+    def get_all_products(self):
+        """Devuelve todos los productos disponibles."""
+        return self.modelo.consultarDatos()
+
+    def registrarProducto(self, nombre, descripcion, categoria, precio, vendidos, dia, hora):
+        """Método para registrar un nuevo producto usando el modelo."""
+        self.modelo.registrarProducto(nombre, descripcion, categoria, precio, vendidos, dia, hora)
 
 if __name__ == "__main__":
-    root = tk.Tk()
-    app = Controller(root)
-    root.mainloop()
+    ventana = tk.Tk()
+    app = Controlador(ventana)
+    ventana.mainloop()
+
+
+
+
+
 
 
 
