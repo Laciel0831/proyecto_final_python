@@ -35,7 +35,7 @@ class Login:
         self.frame_botones.pack(fill='both',expand=True)
 
         "--------------- Botones --------------------"
-        tk.Button(self.frame_botones, text="INGRESAR", command=self.iniciar_sesion, height=2, width=12, bg="green", fg="white", font=("Comic Sans", 10, "bold")).pack(pady=15)
+        tk.Button(self.frame_botones, text="INGRESAR", command=self.iniciar_sesion, height=2, width=12, bg="blue", fg="white", font=("Comic Sans", 10, "bold")).pack(pady=15)
         
     def Validar_formulario_completo(self,texto):
         messagebox.showinfo("Ingreso Exitoso",texto)
@@ -54,7 +54,3 @@ class Login:
         self.marco.pack_forget()
         self.label.pack_forget()
         self.frame_botones.pack_forget()
-
-
-
-
