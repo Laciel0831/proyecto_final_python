@@ -113,10 +113,6 @@ class VistaProducto(tk.Toplevel):
             else:
                 print("Clave 'categoria' no encontrada en:", producto)
 
-
-
-
-
     def vaciar_tabla(self):
         filas = self.tablaProductos.get_children()
         for fila in filas:
@@ -141,6 +137,7 @@ class VistaProducto(tk.Toplevel):
                     self.tablaProductos.delete(id)  # Elimina la fila en la tabla
                     self.limpiar_campos()  # Limpia los campos de entrada
                     messagebox.showinfo("Acción Realizada Exitosamente", "Producto eliminado con éxito")
+                    self.controller.ActualizarCatalogo()
                 else:
                     messagebox.showerror("Error", "No se puede eliminar el producto con ID 0")
             except ValueError:
