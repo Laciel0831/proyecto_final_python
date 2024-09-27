@@ -54,7 +54,8 @@ class Controlador:
             self.vista = ReportView(self.vistaInforme, self)
             self.vista.pack(fill="both", expand=True)
         else:
-            messagebox.showerror("ERROR:","Se necesitan credenciales de administrador para acceder a los reportes.")
+            texto="Se necesitan credenciales de administrador para acceder a los reportes."
+            self.vista.mensajeError(texto)
 
     def vistaRegistroProducto(self):
         self.vistaRegistro = VistaProducto(self)
