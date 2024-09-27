@@ -150,3 +150,6 @@ class vista_catalogo(tk.Frame):
     
     def mensaje(self,texto):
         messagebox.showwarning("Acción Invalida",texto)
+
+    def mensajeError(self,texto):
+        messagebox.showerror("ERROR:",texto)
